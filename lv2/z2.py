@@ -1,8 +1,3 @@
-# Datoteka data.csv sadrži mjerenja visine i mase provedena na muškarcima i
-# ženama. Skripta zadatak_2.py uˇcitava dane podatke u obliku numpy polja data pri ˇcemu je u
-# prvom stupcu polja oznaka spola (1 muško, 0 žensko), drugi stupac polja je masa u kg, a tre´ci
-# # stupac polja je visina u cm.
-
 import matplotlib.pyplot as plt
 import numpy as np
 from statistics import mean
@@ -15,7 +10,6 @@ with open("data.csv", 'r') as x:
     sample_data = list(csv.reader(x, delimiter=","))
 
 sample_data = np.array(sample_data)
-#print(sample_data)
 
 # a)
 print(len(sample_data)-1)
@@ -30,7 +24,7 @@ weight=np.delete(weight,0) #weight
 
 h = height.astype(float)
 w = weight.astype(float)
-#plt.scatter(h, w, color = 'hotpink')
+plt.scatter(h, w, color = 'hotpink')
 
 
 # c)
@@ -46,17 +40,15 @@ plt.ylabel ('Weight')
 plt.title ( 'Scatter plot')
 
 plt.show()
-# d) Izracunajte i ispišite u terminal minimalnu, maksimalnu i srednju vrijednost visine u ovom
-# podatkovnom skupu.
+
+# d) 
 
 h = height.astype(float)
 print(f"Min height: {min(h)}")
 print(f"Max height: {max(h)}")
 print(f"Arithmetic value: {mean(h)}")
 
-# e) Ponovite zadatak pod d), ali samo za muškarce, odnosno žene. Npr. kako biste izdvojili
-# muškarce, stvorite polje koje sadrži bool vrijednosti i njega koristite kao indeks retka.
-# ind = (data[:,0] == 1)
+# e) 
 
 s = s.astype(float)
 ind = (s == 1.0) #male

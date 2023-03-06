@@ -1,4 +1,3 @@
-#z1
 
 def total_euro(working_hours, price_per_hour):
     return working_hours * price_per_hour
