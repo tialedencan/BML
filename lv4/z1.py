@@ -9,6 +9,7 @@ from sklearn.metrics import mean_absolute_percentage_error
 from sklearn.metrics import r2_score
 import matplotlib . pyplot as plt
 import math
+import numpy as np
 
 # a)  Odaberite željene numeriˇcke veliˇcine specificiranjem liste s nazivima stupaca. Podijelite 
 # #podatke na skup za uˇcenje i skup za testiranje u omjeru 80%-20%.
@@ -16,53 +17,39 @@ import math
 
 data = pd.read_csv('data_C02_emission.csv')
 
-# es = data['Engine Size (L)']
-# c = data['Cylinders']
-# fcc = data['Fuel Consumption City (L/100km)']
-# co2 = data['CO2 Emissions (g/km)']
-
 x = data[['Engine Size (L)','Cylinders','Fuel Consumption City (L/100km)','Fuel Consumption Hwy (L/100km)','Fuel Consumption Comb (L/100km)','Fuel Consumption Comb (mpg)']]
 y = data[['CO2 Emissions (g/km)']]
 
-#nums_list = nums.values.tolist()
+x = x.to_numpy()
+y = y.to_numpy()
 
-# es= []
-# c = []
-# fcc = []
-# co2 = []
-
-# for ith_list in nums_list:
-#     es.append(ith_list[0])
-#     c.append(ith_list[1])
-#     fcc.append(ith_list[2])
-#     co2.append(ith_list[3]) 
-
-# data_to_separate = []
-# data_to_separate.append(es)
-# data_to_separate.append(c)
-# data_to_separate.append(fcc)
-# data_to_separate.append(co2)
-
-#print(nums)
-#print(nums_list)
-
-#es,c,fcc,co2 = nums_list
 # podijeli skup na podatkovni skup za ucenje i podatkovni skup za testiranje
 X_train , X_test , y_train , y_test = train_test_split (x, y, test_size = 0.2, random_state = 1)
-#print(X_train)
-#print(y_train)
-print(X_test)
-print(y_test)
+
 # b) Pomo´cu matplotlib biblioteke i dijagrama raspršenja prikažite ovisnost emisije C02 plinova
 # o jednoj numeriˇckoj veliˇcini. Pri tome podatke koji pripadaju skupu za uˇcenje oznaˇcite
 # plavom bojom, a podatke koji pripadaju skupu za testiranje oznaˇcite crvenom bojom.
 
 
-plt.scatter(x = X_train['Engine Size (L)'], y = y_train['CO2 Emissions (g/km)'], color = 'b', s = 9)
-plt.scatter(x = X_test['Engine Size (L)'], y = y_test['CO2 Emissions (g/km)'], color = 'r', s = 9)
+plt.scatter(x = X_train[:,0], y = y_train[:,0], color = 'b', s = 9, label = 'train')
+plt.scatter(x = X_test[:,0], y = y_test[:,0], color = 'r', s = 9, label = 'test')
 plt.xlabel('Engine Size (L)')
 plt.ylabel('CO2 Emissions (g/km)')
-# plt.show()
+plt.legend()
+
+plt.figure()
+plt.scatter(x = X_train[:,1], y = y_train[:,0], color = 'b', s = 9,label = 'train')
+plt.scatter(x = X_test[:,1], y = y_test[:,0], color = 'r', s = 9, label = 'test')
+plt.xlabel('Cylinders')
+plt.ylabel('CO2 Emissions (g/km)')
+plt.legend()
+
+plt.figure()
+plt.scatter(x = X_train[:,2], y = y_train[:,0], color = 'b', s = 9,label = 'train')
+plt.scatter(x = X_test[:,2], y = y_test[:,0], color = 'r', s = 9,label = 'test')
+plt.xlabel('Fuel Consumption City (L/100km)')
+plt.ylabel('CO2 Emissions (g/km)')
+plt.legend()
 
 
 # c) Izvršite standardizaciju ulaznih veliˇcina skupa za uˇcenje. Prikažite histogram vrijednosti
@@ -76,36 +63,18 @@ X_train_n = sc. fit_transform ( X_train )
 
 
 fig, ax = plt.subplots(1, 2, sharex='col', sharey='row')
-ax[0].hist(X_train['Engine Size (L)'], bins = 20)
+ax[0].hist(X_train[:,0], bins = 20)
 ax[0].set_title('Engine Size (L)')
 ax[1].hist(X_train_n[:,0], bins = 20)
 ax[1].set_title('Engine Size (L) - scaled')
-# plt.show()
+plt.show()
 
 X_test_n = sc. transform ( X_test )
-
-#print(X_train_n)
-#print(X_test_n)
-
-# sc = MinMaxScaler ()
-
-# X = nums['Engine Size (L)']
-# y = nums['CO2 Emissions (g/km)']
-
-# X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.2, random_state =1)
-# es_train_n = sc.fit_transform(es_train)
-# c_train_n = sc.fit_transform(c_train) 
-# fcc_train_n = sc.fit_transform(fcc_train) 
-# co2_train_n = sc.fit_transform(co2_train)
-# plt.hist(es_train_n, bins = 30)
-# plt.show()
-# plt.hist(es_train, bins = 30)
-# plt.show()
 
 # d) Izgradite linearni regresijski modeli. Ispišite u terminal dobivene parametre modela i
 # povežite ih s izrazom 4.6.
 
-  
+
 linearModel = lm.LinearRegression()
 linearModel.fit( X_train_n , y_train)     
 
@@ -128,7 +97,6 @@ plt.scatter( y_test, y_test_p, c = 'm')
 plt.xlabel('CO2 Emission - real')
 plt.ylabel('CO2 Emission - prediction')
 # plt.show()
-
 
 
 # f) Izvršite vrednovanje modela na naˇcin da izraˇcunate vrijednosti regresijskih metrika na
@@ -156,15 +124,20 @@ print(f'R^2: {r2}')
 # ulaznih veliˇcina?
 #['Engine Size (L)','Cylinders','Fuel Consumption City (L/100km)'] da ostanu ti stupci
 
-X_train = X_train.drop(columns=['Fuel Consumption Hwy (L/100km)',  'Fuel Consumption Comb (L/100km)',  'Fuel Consumption Comb (mpg)'])
-print(X_train)
+X_train = np.delete(X_train, 5, axis = 1)
+X_train = np.delete(X_train, 4, axis = 1)
+X_train = np.delete(X_train, 3, axis = 1)
+
 scaler = MinMaxScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 
 lModel = lm.LinearRegression()
 lModel.fit( X_train_scaled, y_train)    
 
-X_test = X_test.drop(columns=['Fuel Consumption Hwy (L/100km)',  'Fuel Consumption Comb (L/100km)',  'Fuel Consumption Comb (mpg)'])
+X_test = np.delete(X_test, 5, axis = 1)
+X_test = np.delete(X_test, 4, axis = 1)
+X_test = np.delete(X_test, 3, axis = 1)
+
 X_test_n = scaler. transform ( X_test )
 
 y_test_p = lModel.predict( X_test_n )
