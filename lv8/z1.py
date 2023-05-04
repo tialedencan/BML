@@ -58,14 +58,14 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 # 5. Pokrenite uˇcenje mreže (samostalno definirajte broj epoha i veliˇcinu serije). Pratite tijek
 # uˇcenja u terminalu.
 
-history = model.fit(x_train_reshaped,y_train_encoded,epochs=4,batch_size=50)
+history = model.fit(x_train_reshaped, y_train_encoded, epochs=20, batch_size=32, validation_split = 0.1)
 #print(history.history)
 
 # 6. Izvršite evaluaciju mreže na testnom skupu podataka pomo´cu metode .evaluate.
 
 # Evaluate the model on the test data using `evaluate`
 print("Evaluate on test data")
-results = model.evaluate(x_test_reshaped, y_test_encoded, batch_size=128)
+results = model.evaluate(x_test_reshaped, y_test_encoded, batch_size=64)
 print("test loss, test acc:", results)
 
 # 7. Izraˇcunajte predikciju mreže za skup podataka za testiranje. Pomo´cu scikit-learn biblioteke
@@ -85,5 +85,5 @@ disp.plot()
 plt.show()
 
 # 8. Pohranite model na tvrdi disk.
-model.save('Model/')
+model.save('Model/new')
 

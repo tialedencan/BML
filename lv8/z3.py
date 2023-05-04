@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-saved_model = tf.keras.models.load_model('Model/')
+saved_model = tf.keras.models.load_model('Model/new')
 
 # Load the image and convert it to grayscale
 image = Image.open('test1.png').convert('L')
